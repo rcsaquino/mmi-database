@@ -15,7 +15,7 @@
     <div v-else>
       <p>Medical Missions Inc.</p>
       <p>Please install to continue...</p>
-      <p>Need help? Email: reychristianaquino@gmail.com</p>
+      <p>Need help? Email: rcsaquino.dev@gmail.com</p>
     </div>
   </div>
 </template>

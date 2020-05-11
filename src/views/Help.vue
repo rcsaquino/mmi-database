@@ -23,8 +23,8 @@
         <li>
           If you need help, send me an e-mail at
           <a
-            onclick="window.open('mailto:reychristianaquino@gmail.com')"
-          >reychristianaquino@gmail.com</a>
+            onclick="window.open('mailto:rcsaquino.dev@gmail.com')"
+          >rcsaquino.dev@gmail.com</a>
         </li>
       </ul>
       <v-divider class="pb-4"></v-divider>
