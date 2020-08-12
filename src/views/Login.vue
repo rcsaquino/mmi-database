@@ -38,7 +38,7 @@ export default {
       password: "",
       loading: false,
       snackbar: false,
-      snackbarText: ""
+      snackbarText: "",
     };
   },
   methods: {
@@ -47,20 +47,33 @@ export default {
 
       // Set timeout for loading animation lol
       setTimeout(() => {
+        // Membership Officer
         if (
           this.username.hash() === "f2d734ea5156ae394da3bcecba004f5e" &&
+          this.password.hash() === "5f05cdd0991dbde56029ffb757ef5d05"
+        ) {
+          this.loading = false;
+          this.$store.commit("loginStatus", true);
+          this.$store.commit("membershipPrivileges", true);
+          this.$router.push("/");
+
+          // Non membership officer
+        } else if (
+          this.username.hash() === "680b5db06a6207cc025fe7ad86aac312" &&
           this.password.hash() === "2863571133a38ac4ba274fe6592b218a"
         ) {
           this.loading = false;
           this.$store.commit("loginStatus", true);
           this.$router.push("/");
+
+          // Incorrect login credentials
         } else {
           this.loading = false;
           this.snackbarText = "Wrong username or password!";
           this.snackbar = true;
         }
       }, 700);
-    }
-  }
+    },
+  },
 };
 </script>

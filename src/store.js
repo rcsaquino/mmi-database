@@ -9,7 +9,7 @@ export default new Vuex.Store({
     logs: [],
     isLoggedIn: false,
     currentUser: null,
-    isMembership: true,
+    isMembership: false,
     searchMembers: "",
     searchOfficers: "",
     memberDialog: false,
@@ -52,6 +52,9 @@ export default new Vuex.Store({
     },
     loginStatus(state, status) {
       state.isLoggedIn = status;
+    },
+    membershipPrivileges(state, status) {
+      state.isMembership = status;
     },
 
     //Toolbar Actions

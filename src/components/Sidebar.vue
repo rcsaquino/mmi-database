@@ -68,7 +68,7 @@ export default {
   }),
   computed: {
     currentUser() {
-      return "ustmmisg@gmail.com";
+      return this.$store.state.isMembership ? "Admin" : "ustmmisg@gmail.com"
     }
   },
   methods: {
@@ -77,6 +77,7 @@ export default {
     },
     logout() {
       this.$store.commit("loginStatus", false);
+      this.$store.commit("membershipPrivileges", false);
       this.reroute("/login");
 
       // Reset search

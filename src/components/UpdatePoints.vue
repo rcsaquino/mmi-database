@@ -15,6 +15,12 @@
       :disabled="!isMembership"
     ></v-autocomplete>
     <v-text-field v-model="points" label="Points" :disabled="!isMembership"></v-text-field>
+    <v-checkbox
+      v-model="affectsWorkTime"
+      label="Update Missioner Standing"
+      color="primary"
+      :disabled="!isMembership"
+    ></v-checkbox>
     <v-row class="px-2 pb-2" justify="end">
       <v-btn text @click="openDialog('resetPoints')" :disabled="!isMembership">Reset</v-btn>
       <v-btn text @click="updatePoints()" :disabled="!isMembership">Deduct</v-btn>
@@ -52,31 +58,37 @@ export default {
     confirmDialog: false,
     dialogTrigger: "",
     confirmSnackbar: 0,
-    confirmSnackbarText: ""
+    confirmSnackbarText: "",
+    affectsWorkTime: false,
   }),
 
   computed: {
     members() {
-      return store.state.members.filter(member => member.position === "Member");
+      return store.state.members.filter(
+        (member) => member.position === "Member" && member.status === "Active"
+      );
     },
     isMembership() {
       return store.state.isMembership;
-    }
+    },
   },
 
   methods: {
     updatePoints(operator) {
       if (this.selected && !isNaN(this.points) && this.points !== "") {
         const today = new Date().getTime();
-        this.members.forEach(member => {
-          this.selected.forEach(select => {
+        this.members.forEach((member) => {
+          this.selected.forEach((select) => {
             if (member.id === select) {
-              const updatedPoints =
-                operator === "add"
-                  ? +member.points + +this.points
-                  : +member.points - +this.points;
+              if (operator === "add") {
+                member.points += +this.points;
+                if (this.affectsWorkTime) {
+                  member.totalWorkTime += +this.points * 360000;
+                }
+              } else {
+                member.points -= this.points;
+              }
 
-              member.points = updatedPoints;
               this.db_update_members(member);
 
               // Create Log
@@ -97,13 +109,14 @@ export default {
         this.snackbar = true;
         this.selected = "";
         this.points = "";
+        this.affectsWorkTime = false;
       }
     },
     resetPoints() {
       const today = new Date().getTime();
       if (this.selected) {
-        this.members.forEach(member => {
-          this.selected.forEach(select => {
+        this.members.forEach((member) => {
+          this.selected.forEach((select) => {
             if (member.id === select) {
               member.points = 0;
               this.db_update_members(member);
@@ -138,7 +151,7 @@ export default {
         this.confirmSnackbar++;
       }
       this.confirmDialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
