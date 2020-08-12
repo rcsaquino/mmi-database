@@ -29,7 +29,7 @@
       </ul>
       <v-divider class="pb-4"></v-divider>
       <p>Version: {{ appVersion }}</p>
-      <p>© 2019-2020</p>
+      <p>© 2019-{{ new Date().getFullYear() }}</p>
     </v-card-text>
   </v-card>
 </template>
@@ -40,8 +40,8 @@ export default {
   computed: {
     appVersion() {
       return appInfo.version;
-    }
-  }
+    },
+  },
 };
 </script>
 
