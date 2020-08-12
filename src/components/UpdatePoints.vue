@@ -14,17 +14,37 @@
       @change="search = ''"
       :disabled="!isMembership"
     ></v-autocomplete>
-    <v-text-field v-model="points" label="Points" :disabled="!isMembership"></v-text-field>
+    <v-text-field
+      v-model="points"
+      label="Points"
+      :disabled="!isMembership"
+    ></v-text-field>
     <v-checkbox
       v-model="affectsWorkTime"
-      label="Update Missioner Standing"
       color="primary"
       :disabled="!isMembership"
-    ></v-checkbox>
+      v-bind="attrs"
+      v-on="on"
+    >
+      <template v-slot:label>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on">Update Missioner Standing</span>
+          </template>
+          <span>Update missioner's standing on "Most Active Missioners" depending on the points added/deducted.</span>
+        </v-tooltip>
+      </template></v-checkbox
+    >
     <v-row class="px-2 pb-2" justify="end">
-      <v-btn text @click="openDialog('resetPoints')" :disabled="!isMembership">Reset</v-btn>
-      <v-btn text @click="updatePoints()" :disabled="!isMembership">Deduct</v-btn>
-      <v-btn text @click="updatePoints('add')" :disabled="!isMembership">Add</v-btn>
+      <v-btn text @click="openDialog('resetPoints')" :disabled="!isMembership"
+        >Reset</v-btn
+      >
+      <v-btn text @click="updatePoints()" :disabled="!isMembership"
+        >Deduct</v-btn
+      >
+      <v-btn text @click="updatePoints('add')" :disabled="!isMembership"
+        >Add</v-btn
+      >
     </v-row>
     <ConfirmPrompt
       :title="confirmTitle"
@@ -35,7 +55,9 @@
       @cancel="answerDialog"
       @ok="answerDialog('ok')"
     />
-    <v-snackbar v-model="snackbar" :timeout="1000">{{ snackbarText }}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="1000">{{
+      snackbarText
+    }}</v-snackbar>
   </v-card>
 </template>
 
@@ -87,6 +109,9 @@ export default {
                 }
               } else {
                 member.points -= this.points;
+                if (this.affectsWorkTime) {
+                  member.totalWorkTime -= +this.points * 360000;
+                }
               }
 
               this.db_update_members(member);
@@ -119,6 +144,9 @@ export default {
           this.selected.forEach((select) => {
             if (member.id === select) {
               member.points = 0;
+              if (this.affectsWorkTime) {
+                member.totalWorkTime = 0;
+              }
               this.db_update_members(member);
 
               // Create log
@@ -130,6 +158,8 @@ export default {
         });
         this.selected = "";
         this.points = "";
+
+        this.affectsWorkTime = false;
       }
     },
     openDialog(trigger) {
