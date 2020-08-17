@@ -107,6 +107,13 @@ export default {
         );
       };
     }
+
+    // Analytics
+    try {
+      firebase.analytics();
+    } catch {
+      console.error("Analytics Failed!");
+    }
   },
 };
 </script>
