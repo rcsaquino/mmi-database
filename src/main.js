@@ -21,6 +21,8 @@ Vue.use(Vuetify, {
   }
 });
 
+firebase && firebase.analytics()
+
 new Vue({
   vuetify: new Vuetify(theme),
   router,

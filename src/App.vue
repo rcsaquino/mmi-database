@@ -50,7 +50,7 @@ export default {
     },
     inRegistration() {
       return this.$route.path === "/registration";
-    }
+    },
   },
 
   created() {
@@ -62,7 +62,7 @@ export default {
 
     // Add event listener if app is not installed
     if (!this.isInstalled) {
-      window.addEventListener("appinstalled", evt => {
+      window.addEventListener("appinstalled", (evt) => {
         // Force reload to re-render components
         location.reload();
       });
@@ -75,7 +75,7 @@ export default {
       const request = indexedDB.open("MMI_Database", 1);
 
       // Upgrade needed
-      request.onupgradeneeded = e => {
+      request.onupgradeneeded = (e) => {
         db = e.target.result;
 
         // Initial Version
@@ -86,7 +86,7 @@ export default {
         }
       };
 
-      request.onsuccess = e => {
+      request.onsuccess = (e) => {
         // Store database
         this.$store.commit("receiveDB", e.target.result);
 
@@ -101,13 +101,13 @@ export default {
         this.$store.commit("syncLogs");
       };
 
-      request.onerror = e => {
+      request.onerror = (e) => {
         alert(
           `Database error! Try connecting to the internet and press F5 to update. If this does not work, please contact developer for help.\n\n${e.target.error}`
         );
       };
     }
-  }
+  },
 };
 </script>
 
